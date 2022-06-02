@@ -1,4 +1,4 @@
-# rofi-iwd-menu
+# wofi-iwd-menu
 This repository contains a simple script for managing a [wofi](https://hg.sr.ht/~scoopta/wofi)-based menu that can control WiFi connections via [iwd](https://wiki.archlinux.org/index.php/Iwd). This is a port of [Zach Baylin](https://github.com/zbaylin)'s work on [rofi-wifi-menu](https://github.com/zbaylin/rofi-wifi-menu) which borrows heavily from the source material. This is a fork of [TimTinker's rofi-iwd-menu](https://github.com/TimTinkers/rofi-iwd-menu) with very minor changes to use wofi instead of rofi.
 
 ## Usage
