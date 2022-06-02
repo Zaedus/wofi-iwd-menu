@@ -11,7 +11,6 @@ DEVICE=${1:-wlan0}
 POSITION=${2:-0}
 Y_OFF=${3:-0}
 X_OFF=${4:-0}
-FONT="DejaVu Sans Mono 12"
 
 ## Scan for available and broadcasting SSIDs.
 iwctl station $DEVICE scan
@@ -68,13 +67,13 @@ elif [ "$LINE_COUNT" -gt 8 ] || [[ "$CON_STATE" =~ "disconnected" ]]; then
 fi
 
 ## Grab the user's chosen SSID entry.
-CHENTRY=$(echo -e "$MENU" | uniq -u | rofi -dmenu -p "WiFi SSID" -lines "$LINE_COUNT" -a "$HIGHLINE" -location "$POSITION" -yoffset "$Y_OFF" -xoffset "$X_OFF" -font "$FONT" -width -"$R_WIDTH")
+CHENTRY=$(echo -e "$MENU" | uniq -u | wofi --show dmenu -p "WiFi SSID" -L "$LINE_COUNT" --location "$POSITION" -O default)
 CHSSID=$(echo "$CHENTRY" | sed  's/\s\{2,\}/\|/g' | awk -F "|" '{print $1}')
 
 ## Support manual SSID entry.
 if [ "$CHENTRY" = "manually connect to a network" ] ; then
-	MSSID=$(echo "Enter your network's SSID." | rofi -dmenu -p "SSID: " -font "$FONT" -lines 1)
-	WIFI_PASS=$(echo "Enter the network password." | rofi -dmenu -password -p "Password: " -lines 1 -location "$POSITION" -yoffset "$Y_OFF" -xoffset "$X_OFF" -font "$FONT" -width -"$R_WIDTH")
+	MSSID=$(echo "Enter your network's SSID." | wofi --show dmenu -p "SSID: " --lines 1)
+	WIFI_PASS=$(echo "Enter the network password." | wofi --show dmenu --password -p "Password: " --lines 1 --location "$POSITION")
 	iwctl station $DEVICE disconnect
 	iwctl --passphrase $WIFI_PASS station $DEVICE connect $MSSID
 
@@ -84,7 +83,7 @@ elif [[ "$CHENTRY" =~ "disconnect from " ]]; then
 
 ## Support connecting to the chosen network.
 elif [ "$CHSSID" != "" ]; then
-	WIFI_PASS=$(echo "Enter the network password." | rofi -dmenu -password -p "Password: " -lines 1 -location "$POSITION" -yoffset "$Y_OFF" -xoffset "$X_OFF" -font "$FONT" -width -"$R_WIDTH")
+	WIFI_PASS=$(echo "Enter the network password." | wofi --show dmenu --password -p "Password: " --lines 1 --location "$POSITION")
 	iwctl station $DEVICE disconnect
 	iwctl --passphrase $WIFI_PASS station $DEVICE connect $CHSSID
 fi
